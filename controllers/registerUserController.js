@@ -17,6 +17,7 @@ const registerNewUserController = async (req, res, next) => {
         };
 
         const newUser = await registerNewUser(userData);
+
         res.status(201).json({ newUser });
     }catch(err){
         res.status(500).json({ error: err.message });

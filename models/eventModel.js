@@ -14,8 +14,8 @@ const getAllEvents = async () => {
 // Function to create new event
 const createNewEvent = async (eventData) => {
 	try{
-		const query = "INSERT INTO event (event_name, event_date, event_time, event_location, event_performer, event_category, event_ticket_price) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING *";
-		const values = [eventData.event_name, eventData.event_date, eventData.event_time, eventData.event_location, eventData.event_performer, eventData.event_category, eventData.event_ticket_price];
+		const query = "INSERT INTO event (event_name, event_date, event_time, event_location, event_performer, event_category, event_ticket_price, event_image) VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING *";
+		const values = [eventData.event_name, eventData.event_date, eventData.event_time, eventData.event_location, eventData.event_performer, eventData.event_category, eventData.event_ticket_price, eventData.event_image];
 		const { rows } = await pool.query(query, values);
 		return rows[0];
 	}catch(err){
