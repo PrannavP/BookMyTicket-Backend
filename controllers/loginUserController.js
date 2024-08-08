@@ -4,6 +4,7 @@ const { loginUserModel } = require('../models/loginUserModel');
 const loginUserController = async (req, res, next) => {
     try{
         const { email, password } = req.body;
+        // console.log(email, password);
 
         // validating email and password
         if(!email || !password){
