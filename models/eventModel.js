@@ -23,7 +23,36 @@ const createNewEvent = async (eventData) => {
 	};
 };
 
+// get events by date
+const getEventByDates = async (filterdDates) => {
+	try{
+		const query = "SELECT * FROM event WHERE event_date >= $1 AND event_date <= $2";
+		const values = [filterdDates.fromDate, filterdDates.toDate];
+		const { rows } = await pool.query(query, values);
+		if(rows && rows.length >0){
+			return rows;
+		}else{
+			return { message: "No events found." };
+		};
+	}catch(err){
+		throw new Error("Error while filtering events by date: " + err.message);
+	};
+};
+
+// get events by time
+
+	// start coding from here
+
+// const getEventsByDates = async (filterdTime) => {
+// 	try{
+// 		const query = "SELECT * FROM event WHERE event_time >= $1 AND event_time <= $2";
+// 		const value = [filterdTime.fromTime, filterdTime.toTime];
+// 		const { rows } = await
+// 	}
+// };
+
 module.exports = {
 	getAllEvents,
 	createNewEvent,
+	getEventByDates
 };

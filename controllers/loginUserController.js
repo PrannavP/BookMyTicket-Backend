@@ -1,10 +1,10 @@
 const { loginUserModel } = require('../models/loginUserModel');
+const { generateToken }  = require('../auth/auth');
 
 // Controller to login
 const loginUserController = async (req, res, next) => {
     try{
         const { email, password } = req.body;
-        // console.log(email, password);
 
         // validating email and password
         if(!email || !password){
@@ -14,8 +14,9 @@ const loginUserController = async (req, res, next) => {
         // calling the login function
         const user = await loginUserModel(email, password);
 
-        // return success response
-        res.status(201).json({ user });
+        // generate the JWT token
+        const token = generateToken(user.id);
+        res.status(201).json({ login: true, message: 'Login successful', token, user });
     }catch(err){
         res.status(500).json({ error: err.message });
     }
