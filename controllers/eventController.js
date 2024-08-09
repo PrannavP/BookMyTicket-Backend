@@ -1,4 +1,4 @@
-const { getAllEvents, createNewEvent, getEventByDates } = require('../models/eventModel');
+const { getAllEvents, createNewEvent, getEventByDates, getEventsByTime } = require('../models/eventModel');
 
 // Controller to get all events
 const getAllEventsController = async (req, res, next) => {
@@ -25,6 +25,23 @@ const getEventsByDateController = async (req, res, next) => {
 	}catch(err){
 		next(err);
 	};
+};
+
+// Controller to get events by filtering time
+const getEventsByTimeController = async (req, res, next) => {
+    try{
+        const { fromTime, toTime } = req.body;
+
+        const selectedTimes = {
+            fromTime,
+            toTime
+        };
+
+        const filteredEvents = await getEventsByTime(selectedTimes);
+        res.status(201).json({ filteredEvents });
+    }catch(err){
+        next(err);
+    }
 };
 
 
@@ -58,4 +75,5 @@ module.exports = {
 	getAllEventsController,
 	createNewEventController,
 	getEventsByDateController,
+    getEventsByTimeController
 };

@@ -7,6 +7,7 @@ const userRegisterRoutes = require('./routes/registerUserRoutes');
 const createNewEventRoutes = require('./routes/newEventRoutes');
 const loginUserRoutes = require('./routes/loginUserRoutes');
 const eventFilterByDateRoutes = require('./routes/eventsFilterByDate');
+const eventFilterByTimeRoutes = require('./routes/eventFilteredByTime');
 
 const app = express();
 
@@ -23,6 +24,7 @@ app.use('/uploads/event_image', express.static('uploads/event_image'));
 app.use('/events', eventRoutes);
 app.use('/createNewEvent', createNewEventRoutes);
 app.use('/getEventsByDate', eventFilterByDateRoutes);
+app.use('/getEventsByTime', eventFilterByTimeRoutes);
 
 // User Related Routes
 app.use('/register', userRegisterRoutes);

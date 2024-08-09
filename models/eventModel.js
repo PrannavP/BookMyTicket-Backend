@@ -40,19 +40,24 @@ const getEventByDates = async (filterdDates) => {
 };
 
 // get events by time
-
-	// start coding from here
-
-// const getEventsByDates = async (filterdTime) => {
-// 	try{
-// 		const query = "SELECT * FROM event WHERE event_time >= $1 AND event_time <= $2";
-// 		const value = [filterdTime.fromTime, filterdTime.toTime];
-// 		const { rows } = await
-// 	}
-// };
+const getEventsByTime = async (filterdTime) => {
+	try{
+		const query = "SELECT * FROM event WHERE event_time >= $1 AND event_time <= $2";
+		const value = [filterdTime.fromTime, filterdTime.toTime];
+		const { rows } = await pool.query(query,value);
+		if(rows && rows.length > 0){
+			return rows;
+		}else{
+			return { message: "No events found." };
+		}
+	}catch(err){
+		throw new Error("Error while filtering by time: " + err.message);
+	};
+};
 
 module.exports = {
 	getAllEvents,
 	createNewEvent,
-	getEventByDates
+	getEventByDates,
+	getEventsByTime
 };
