@@ -29,7 +29,7 @@ const getEventByDates = async (filterdDates) => {
 		const query = "SELECT * FROM event WHERE event_date >= $1 AND event_date <= $2";
 		const values = [filterdDates.fromDate, filterdDates.toDate];
 		const { rows } = await pool.query(query, values);
-		if(rows && rows.length >0){
+		if(rows && rows.length > 0){
 			return rows;
 		}else{
 			return { message: "No events found." };

@@ -8,6 +8,7 @@ const createNewEventRoutes = require('./routes/newEventRoutes');
 const loginUserRoutes = require('./routes/loginUserRoutes');
 const eventFilterByDateRoutes = require('./routes/eventsFilterByDate');
 const eventFilterByTimeRoutes = require('./routes/eventFilteredByTime');
+const userInfoByIdRoutes = require('./routes/userIdRoutes');
 
 const app = express();
 
@@ -29,6 +30,7 @@ app.use('/getEventsByTime', eventFilterByTimeRoutes);
 // User Related Routes
 app.use('/register', userRegisterRoutes);
 app.use('/login', loginUserRoutes);
+app.use('/userinfo/', userInfoByIdRoutes);
 
 // Protected Routes
 app.use('/api/protected', require('./routes/protectedRoutes'));

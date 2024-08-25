@@ -1,4 +1,4 @@
-const { loginUserModel } = require('../models/loginUserModel');
+const { loginUserModel, getUserById } = require('../models/loginUserModel');
 const { generateToken }  = require('../auth/auth');
 
 // Controller to login
@@ -22,6 +22,25 @@ const loginUserController = async (req, res, next) => {
     }
 };
 
+// controller to get user info
+const userController = async (req, res) => {
+    try{
+      const userId = req.params.id;
+      
+      if(!userId){
+        return res.status(400).json({ error: 'User ID is required.' });
+      }
+
+      // calling the getuser function
+      const user = await getUserById(userId);
+
+      res.status(201).json({ user });
+    }catch(err){
+        res.status(500).json({ error: err.message });
+    };
+};
+
 module.exports = {
-    loginUserController
+    loginUserController,
+    userController
 };
