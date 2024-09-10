@@ -1,46 +1,54 @@
-const { getAllEvents, createNewEvent, getEventByDates, getEventsByTime } = require('../models/eventModel');
+const { 
+    getAllEvents, 
+    createNewEvent, 
+    getFilteredEvents,
+    getEventByIDModel,
+    } = require('../models/eventModel');
 
 // Controller to get all events
 const getAllEventsController = async (req, res, next) => {
     try {
         const events = await getAllEvents();
-        res.json(events);
-    } catch (error) {
-        next(error);
+        setTimeout(() => {
+            res.json(events);
+        }, 1000);
+    } catch (err) {
+        next(err);
     }
 };
 
-// Controller to get events by filtering date
-const getEventsByDateController = async (req, res, next) => {
-	try{
-		const { fromDate, toDate } = req.body;
-		
-		const selectedDates ={
-			fromDate,
-			toDate
-		};
-
-		const filteredEvents = await getEventByDates(selectedDates);
-		res.status(201).json({ filteredEvents });
-	}catch(err){
-		next(err);
-	};
-};
-
-// Controller to get events by filtering time
-const getEventsByTimeController = async (req, res, next) => {
+// Controller to get event by ID
+const getEventByIDController = async (req, res, next) => {
     try{
-        const { fromTime, toTime } = req.body;
-
-        const selectedTimes = {
-            fromTime,
-            toTime
-        };
-
-        const filteredEvents = await getEventsByTime(selectedTimes);
-        res.status(201).json({ filteredEvents });
+        const id = req.params.id;
+        const event = await getEventByIDModel(req.params.id);
+        res.json(event);
     }catch(err){
         next(err);
+    }
+};
+
+const getFilteredEventsController = async (req, res, next) => {
+    try {
+        const { fromTime, toTime, fromDate, toDate, location, genre } = req.query;
+
+        const events = await getFilteredEvents({
+            fromTime,
+            toTime,
+            fromDate,
+            toDate,
+            location,
+            genre
+        });
+
+        // Ensure the response is always an array
+        if (Array.isArray(events)) {
+            res.json(events);
+        } else {
+            res.json([]);
+        }
+    } catch (error) {
+        next(error);
     }
 };
 
@@ -48,7 +56,7 @@ const getEventsByTimeController = async (req, res, next) => {
 // Controller to create new event
 const createNewEventController = async (req, res, next) => {
     try{
-        const { event_name, event_date, event_time, event_location, event_performer, event_category, event_ticket_price } = req.body;
+        const { event_name, event_date, event_time, event_location, event_performer, event_category, event_ticket_general_price, event_ticket_vip_price, event_total_tickets, event_remaining_tickets } = req.body;
         const eventImage = req.file ? req.file.filename : null;
 
         const eventData = {
@@ -58,8 +66,11 @@ const createNewEventController = async (req, res, next) => {
             event_location,
             event_performer,
             event_category,
-            event_ticket_price,
-            event_image: eventImage
+            event_ticket_general_price,
+            event_image: eventImage,
+            event_ticket_vip_price,
+            event_total_tickets,
+            event_remaining_tickets
       	};
 
      	 // console.log(req.file);
@@ -74,6 +85,6 @@ const createNewEventController = async (req, res, next) => {
 module.exports = {
 	getAllEventsController,
 	createNewEventController,
-	getEventsByDateController,
-    getEventsByTimeController
+    getFilteredEventsController,
+    getEventByIDController,
 };
