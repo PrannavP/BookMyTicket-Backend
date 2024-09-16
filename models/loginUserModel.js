@@ -22,7 +22,7 @@ const loginUserModel = async (email, password) => {
             throw new Error('Invalid password');
         }
         
-        return { id: user.user_id, full_name: user.full_name, address:user.address, contact_number: user.contact_number, role: user.user_type };
+        return { id: user.user_id, full_name: user.full_name, address:user.address, contact_number: user.contact_number, role: user.user_type, image: user.profile_image };
     }catch(err){
         throw new Error('Error logging in user: ' + err.message);
     }
@@ -40,7 +40,7 @@ const getUserById = async (uid) => {
 
         const user = rows[0];
 
-        return { id: user.user_id, full_name: user.full_name, address:user.address, contact_number: user.contact_number, role: user.user_type };
+        return { id: user.user_id, full_name: user.full_name, email: user.email, address:user.address, contact_number: user.contact_number, role: user.user_type, image: user.profile_image };
     }catch(err){
         throw new Error("Error while getting user by ID: " + err.message);
     };

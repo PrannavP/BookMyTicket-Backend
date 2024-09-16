@@ -1,5 +1,18 @@
 const pool = require('../config/dbConfig');
 
+// Function to decrease remaining tickets
+const decreaseEventRemainingTickets = async (eventID) => {
+	try{
+		const query = "UPDATE event SET event_remaining_tickets = event_remaining_tickets - 1 WHERE id = $1";
+		const value = [eventID];
+		console.log('event model ma ho', eventID);
+		const { rows } = await pool.query(query, value);
+		return rows[0];
+	}catch(err){
+		throw new Error("Error while decreasing remaining tickets after booking!", err.message);
+	};
+};
+
 // Function to create new event
 const createNewEvent = async (eventData) => {
 	try{
@@ -34,7 +47,6 @@ const getAllEvents = async () => {
 		throw new Error('Error fetching events: ' + err);
 	}
 };
-
 
 const getFilteredEvents = async ({ fromTime, toTime, fromDate, toDate, location, genre }) => {
 	let query = "SELECT * FROM event WHERE 1=1";
@@ -74,4 +86,5 @@ module.exports = {
 	createNewEvent,
 	getFilteredEvents,
 	getEventByIDModel,
+	decreaseEventRemainingTickets,
 };

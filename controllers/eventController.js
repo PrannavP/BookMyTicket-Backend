@@ -1,8 +1,11 @@
+const sendMail = require('../services/mailer');
+
 const { 
     getAllEvents, 
     createNewEvent, 
     getFilteredEvents,
     getEventByIDModel,
+    decreaseEventRemainingTickets,
     } = require('../models/eventModel');
 
 // Controller to get all events
@@ -17,11 +20,34 @@ const getAllEventsController = async (req, res, next) => {
     }
 };
 
+
+// Controller to decrease remaining tickets
+const decreaseRemainingTicketsController = async(req, res, next) => {
+    try{
+        const id = req.params.id;
+        const { userEmail, userFullName } = req.body;
+
+        await decreaseEventRemainingTickets(id);
+
+        console.log('event controller ma ho', userEmail, userFullName);
+
+        // Send Mail
+        const toEmail = userEmail;
+        const toName = userFullName;
+
+        await sendMail(toEmail, toName);
+
+        res.status(200).send('Decreased Successfully and email sent.');
+    }catch(err){
+        next(err);
+    };
+};
+
 // Controller to get event by ID
 const getEventByIDController = async (req, res, next) => {
     try{
         const id = req.params.id;
-        const event = await getEventByIDModel(req.params.id);
+        const event = await getEventByIDModel(id);
         res.json(event);
     }catch(err){
         next(err);
@@ -80,11 +106,12 @@ const createNewEventController = async (req, res, next) => {
     }catch(err){
       	res.status(500).json({ error: err.message });
     };
-}
+};
 
 module.exports = {
 	getAllEventsController,
 	createNewEventController,
     getFilteredEventsController,
     getEventByIDController,
+    decreaseRemainingTicketsController
 };

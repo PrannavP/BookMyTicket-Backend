@@ -3,7 +3,7 @@ const jwt = require('jsonwebtoken');
 require('dotenv').config();
 
 const JWT_SECRET = process.env.JWT_SECRET_KEY;
-const JWT_EXPIRATION = 3600; // 60 mins
+const JWT_EXPIRATION = 2 * 24 * 60 * 60;
 
 
 const generateToken = (userid) => {
