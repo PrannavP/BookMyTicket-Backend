@@ -12,6 +12,8 @@ const ticketDetailsRoutes = require('./routes/TicketRoutes');
 const UserTicketDetailsRoutes = require('./routes/UserDetailsRoutes');
 const UserUpcomingEventsRoutes = require('./routes/UserDetailsRoutes');
 const UserMoneySpentRoutes = require('./routes/UserDetailsRoutes');
+const UserGenreRoutes = require("./routes/UserGenresRoute");
+const EsewaPaymentRoute = require("./routes/esewapaymentRoute");
 
 const app = express();
 
@@ -43,6 +45,11 @@ app.use('/details/', ticketDetailsRoutes);
 app.use('/details/', UserUpcomingEventsRoutes);
 app.use('/details', UserMoneySpentRoutes);
 
+// User suggestion related routes
+app.use('/suggestions', UserGenreRoutes);
+
+// User payment related routes
+app.use('/payment', EsewaPaymentRoute);
 
 // Sending Email Routes
 app.use('/sendemail', sendEmailRoutes);

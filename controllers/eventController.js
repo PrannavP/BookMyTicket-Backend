@@ -29,8 +29,6 @@ const decreaseRemainingTicketsController = async(req, res, next) => {
 
         await decreaseEventRemainingTickets(id);
 
-        console.log('event controller ma ho', userEmail, userFullName);
-
         // Send Mail
         const toEmail = userEmail;
         const toName = userFullName;
