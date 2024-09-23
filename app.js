@@ -14,6 +14,8 @@ const UserUpcomingEventsRoutes = require('./routes/UserDetailsRoutes');
 const UserMoneySpentRoutes = require('./routes/UserDetailsRoutes');
 const UserGenreRoutes = require("./routes/UserGenresRoute");
 const EsewaPaymentRoute = require("./routes/esewapaymentRoute");
+const EsewaPaymentConfirmationRoute = require("./routes/esewapaymentRoute");
+const TransactionRoute = require("./routes/transactionRoute");
 
 const app = express();
 
@@ -50,6 +52,10 @@ app.use('/suggestions', UserGenreRoutes);
 
 // User payment related routes
 app.use('/payment', EsewaPaymentRoute);
+app.use('/payment', EsewaPaymentConfirmationRoute);
+
+// Transaction related routes
+app.use('/transaction', TransactionRoute);
 
 // Sending Email Routes
 app.use('/sendemail', sendEmailRoutes);

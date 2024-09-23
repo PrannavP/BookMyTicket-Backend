@@ -10,20 +10,20 @@ const generateSignature = (dataString, secretKey) => {
 const esewaPaymentController = (req, res, next) => {
     const event_name = req.body.event_name;
     const event_performer = req.body.event_performer;
-    const event_id = req.body.event_id
+    const event_id = req.body.eventId;
 
-    console.log(event_id);
+    // console.log(event_id);
 
     const amount = req.body.amount;
     const tax_amount = Math.ceil(amount * 0.13); // 13% VAT
     const total_amount = Math.ceil(parseInt(amount) + tax_amount); // total price including VAT
     const transaction_uuid = `TXN-${Math.floor(Math.random() * 1000000)}`; // Generating random uuid
 
-    console.log(transaction_uuid);
+    // console.log(transaction_uuid);
 
     const product_code = 'EPAYTEST'; // this must be EPAYTEST for testing according to esewa docs
-    const success_url = `http://localhost:5173/events/${event_id}`;
-    const failure_url = "https://google.com";
+    const success_url = `http://localhost:5173/successfulpayment/${event_id}`;
+    const failure_url = `http://localhost:5173/events/${event_id}`;
     const signed_field_names = "total_amount,transaction_uuid,product_code";
 
     // Concatenate signed fields for signature
@@ -98,6 +98,26 @@ const esewaPaymentController = (req, res, next) => {
     `);
 };
 
+// after payment check the data part to confirm payment
+const confirmPaymentController = (req, res, next) => {
+    const data = req.body.data;
+
+    // console.log(data);
+
+    // Decode the data
+    const decodedData = Buffer.from(data, 'base64').toString('utf-8');
+    // console.log('Decoded Data: ', decodedData);
+
+    // Parse the decoded JSON String
+    const paymentDetails = JSON.parse(decodedData);
+
+    res.json({ paymentDetails });
+
+    // console.log(data);
+    // res.json({ "data": data });
+};
+
 module.exports = {
     esewaPaymentController,
+    confirmPaymentController
 };
