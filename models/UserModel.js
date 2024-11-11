@@ -7,8 +7,8 @@ const registerNewUser = async (userData) => {
         // hashing the password
         const hashedPassword = await bcrypt.hash(userData.password, 10);
 
-        const query = "INSERT INTO users (full_name, email, password, contact_number, address, age, profile_image) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING *";
-        const values = [userData.full_name, userData.email, hashedPassword, userData.contact_number, userData.address, userData.age, userData.profile_image];
+        const query = "INSERT INTO users (full_name, email, password, contact_number, address, age, profile_image, user_type) VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING *";
+        const values = [userData.full_name, userData.email, hashedPassword, userData.contact_number, userData.address, userData.age, userData.profile_image, userData.user_type];
         const { rows } = await pool.query(query, values);
         return rows[0];
     } catch (err) {
@@ -53,9 +53,67 @@ const getTotalMoneySpentByUsers = async(userID) => {
     };
 };
 
+// Function to update attendee full name
+const updateAttendeeName = async (userDetails) => {
+    try{
+        const query = "UPDATE users SET full_name = $1 WHERE user_id = $2 RETURNING *";
+        const values = [userDetails.newFullName, userDetails.userId];
+        const rows = await pool.query(query, values);
+
+        return rows.rows[0];
+    }catch(err){
+        throw new Error("Error while updating attendee full name.");
+    }
+};
+
+// Function to update attendee email
+const updateAttendeeEmail = async (userDetails) => {
+    try{
+        const query = "UPDATE users SET email = $1 WHERE user_id = $2 RETURNING *";
+        const values = [userDetails.newEmail, userDetails.userId];
+        const rows = await pool.query(query, values);
+
+        return rows.rows[0];
+    }catch(err){
+        throw new Error("Error while updating attendee email.");
+    }
+};
+
+// Function to update attendee contact number
+const updateAttendeeContactNumber = async (userDetails) => {
+    try{
+        const query = "UPDATE users SET contact_number = $1 WHERE user_id = $2 RETURNING *";
+        const values = [userDetails.newContactNumber, userDetails.userId];
+        const rows = await pool.query(query, values);
+
+        return rows.rows[0];
+    }catch(err){
+        throw new Error("Error while updating attendee contact number");
+    }
+};
+
+// Function to get user password
+const getUserPassword = async (userId) => {
+    const query = "SELECT password FROM users WHERE user_id = $1";
+    const values = [userId];
+    const rows = await pool.query(query, values);
+
+    return rows.rows[0].password;
+};
+
+// Function to update user password
+const updateUserPassword = async(userId, newHashedPassword) => {
+    await pool.query("UPDATE users SET password = $1 WHERE user_id = $2", [newHashedPassword, userId]);
+}
+
 module.exports = {
     registerNewUser,
     getUserActiveTicketDetails,
     getUserUpcomingEventDetails,
-    getTotalMoneySpentByUsers
+    getTotalMoneySpentByUsers,
+    updateAttendeeName,
+    updateAttendeeEmail,
+    updateAttendeeContactNumber,
+    getUserPassword,
+    updateUserPassword,
 };

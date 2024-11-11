@@ -3,7 +3,7 @@ const { registerNewUser } = require('../models/UserModel');
 // Controller to get all events
 const registerNewUserController = async (req, res, next) => {
     try{
-        const { full_name, email, password, contact_number, address, age } = req.body;
+        const { full_name, email, password, contact_number, address, age, user_type} = req.body;
         const profileImage = req.file ? req.file.filename : null; // Get filename from multer
 
         const userData = {
@@ -13,7 +13,8 @@ const registerNewUserController = async (req, res, next) => {
             contact_number,
             address,
             age,
-            profile_image: profileImage
+            profile_image: profileImage,
+            user_type
         };
 
         const newUser = await registerNewUser(userData);

@@ -16,6 +16,21 @@ const UserGenreRoutes = require("./routes/UserGenresRoute");
 const EsewaPaymentRoute = require("./routes/esewapaymentRoute");
 const EsewaPaymentConfirmationRoute = require("./routes/esewapaymentRoute");
 const TransactionRoute = require("./routes/transactionRoute");
+const TicketQRCode = require("./routes/qrRoute");
+const verifyTicketRoute = require("./routes/TicketRoutes");
+const TicketsSoldData = require("./routes/eventDetailsRoute");
+const registerOrganizer = require("./routes/organizerRoute");
+const organizerEvents = require("./routes/organizerRoute");
+const organizerEarning = require("./routes/TicketRoutes");
+const organizerTicketsSales = require("./routes/TicketRoutes");
+const organizerActiveEvents = require("./routes/TicketRoutes");
+const attendeeActiveTicketDetails = require("./routes/TicketRoutes");
+const attendeePastTicketDetails = require("./routes/TicketRoutes");
+const updateAttendeeName = require("./routes/UserDetailsRoutes");
+const updatedAttendeeEmail = require("./routes/UserDetailsRoutes");
+const updatedAttendeeContactNumber = require("./routes/UserDetailsRoutes");
+const updateUserPassword = require("./routes/UserDetailsRoutes");
+const bookedTicketDetails = require("./routes/TicketRoutes");
 
 const app = express();
 
@@ -38,6 +53,9 @@ app.use('/api/events/', eventRoutes);
 app.use('/register', userRegisterRoutes);
 app.use('/login', loginUserRoutes);
 app.use('/userinfo/', userInfoByIdRoutes);
+app.use('/attendee', updateAttendeeName);
+app.use('/attendee', updatedAttendeeEmail);
+app.use('/user', updateUserPassword);
 
 // User Ticket Related Routes
 app.use('/userticketdetails/', UserTicketDetailsRoutes);
@@ -46,6 +64,11 @@ app.use('/userticketdetails/', UserTicketDetailsRoutes);
 app.use('/details/', ticketDetailsRoutes);
 app.use('/details/', UserUpcomingEventsRoutes);
 app.use('/details', UserMoneySpentRoutes);
+app.use('/', verifyTicketRoute);
+app.use('/attendee/', attendeeActiveTicketDetails);
+app.use('/attendee', attendeePastTicketDetails);
+app.use('/attendee', updatedAttendeeContactNumber);
+app.use('/organizer/', bookedTicketDetails);
 
 // User suggestion related routes
 app.use('/suggestions', UserGenreRoutes);
@@ -59,6 +82,17 @@ app.use('/transaction', TransactionRoute);
 
 // Sending Email Routes
 app.use('/sendemail', sendEmailRoutes);
+
+// QR Code Routes
+app.use('/', TicketQRCode);
+
+// Organizers related routes
+app.use('/organizer/', TicketsSoldData);
+app.use('/organizer', registerOrganizer);
+app.use('/organizer', organizerEvents);
+app.use('/organizer', organizerEarning);
+app.use('/organizer', organizerTicketsSales);
+app.use('/organizer', organizerActiveEvents);
 
 // Protected Routes
 app.use('/api/protected', require('./routes/protectedRoutes'));

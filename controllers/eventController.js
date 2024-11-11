@@ -25,15 +25,16 @@ const getAllEventsController = async (req, res, next) => {
 const decreaseRemainingTicketsController = async(req, res, next) => {
     try{
         const id = req.params.id;
-        const { userEmail, userFullName } = req.body;
+        const { userEmail, userFullName, ticketQRCodeImage } = req.body;
 
         await decreaseEventRemainingTickets(id);
 
         // Send Mail
         const toEmail = userEmail;
         const toName = userFullName;
+        const ticketQRCode = ticketQRCodeImage;
 
-        await sendMail(toEmail, toName);
+        await sendMail(toEmail, toName, ticketQRCode);
 
         res.status(200).send('Decreased Successfully and email sent.');
     }catch(err){
@@ -80,7 +81,7 @@ const getFilteredEventsController = async (req, res, next) => {
 // Controller to create new event
 const createNewEventController = async (req, res, next) => {
     try{
-        const { event_name, event_date, event_time, event_location, event_performer, event_category, event_ticket_general_price, event_ticket_vip_price, event_total_tickets, event_remaining_tickets } = req.body;
+        const { event_name, event_date, event_time, event_location, event_performer, event_category, event_ticket_general_price, event_ticket_vip_price, event_total_tickets, event_remaining_tickets, event_organizer } = req.body;
         const eventImage = req.file ? req.file.filename : null;
 
         const eventData = {
@@ -94,12 +95,14 @@ const createNewEventController = async (req, res, next) => {
             event_image: eventImage,
             event_ticket_vip_price,
             event_total_tickets,
-            event_remaining_tickets
+            event_remaining_tickets,
+            event_organizer
       	};
 
      	 // console.log(req.file);
 
 		const newEvent = await createNewEvent(eventData);
+
 		res.status(201).json({ newEvent });
     }catch(err){
       	res.status(500).json({ error: err.message });
