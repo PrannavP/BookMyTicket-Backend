@@ -31,6 +31,8 @@ const updatedAttendeeEmail = require("./routes/UserDetailsRoutes");
 const updatedAttendeeContactNumber = require("./routes/UserDetailsRoutes");
 const updateUserPassword = require("./routes/UserDetailsRoutes");
 const bookedTicketDetails = require("./routes/TicketRoutes");
+const changePaymentStatus = require("./routes/TicketRoutes");
+const eventCommunity = require("./routes/eventCommunityRoute");
 
 const app = express();
 
@@ -59,6 +61,7 @@ app.use('/user', updateUserPassword);
 
 // User Ticket Related Routes
 app.use('/userticketdetails/', UserTicketDetailsRoutes);
+app.use("/", changePaymentStatus);
 
 // Tickets Related Routes
 app.use('/details/', ticketDetailsRoutes);
@@ -93,6 +96,9 @@ app.use('/organizer', organizerEvents);
 app.use('/organizer', organizerEarning);
 app.use('/organizer', organizerTicketsSales);
 app.use('/organizer', organizerActiveEvents);
+
+// Event community related routes
+app.use("/", eventCommunity);
 
 // Protected Routes
 app.use('/api/protected', require('./routes/protectedRoutes'));

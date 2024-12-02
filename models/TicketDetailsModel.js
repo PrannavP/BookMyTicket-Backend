@@ -97,13 +97,30 @@ const attendeePastTicketDetails = async (attendee_id) => {
 // function to get booked ticket details for organizers
 const bookedTicketDetails = async (organized_by) => {
 	try{
-		const query = "SELECT tickets.*, users.*, event.* FROM tickets JOIN users ON tickets.booked_by = users.user_id JOIN event ON tickets.event_id = event.id WHERE event.event_organizer = $1";
+		const query = `
+			SELECT tickets.*, users.*, event.* FROM 
+			tickets JOIN users ON tickets.booked_by = users.user_id
+			JOIN event ON tickets.event_id = event.id WHERE event.event_organizer = $1
+		`;
 		const values = [organized_by];
 		const { rows } = await pool.query(query, values);
 
 		return rows;
 	}catch(err){
 		throw new Error("Error while getting booked ticket details.");
+	}
+};
+
+// function to update payment_status after payment success
+const changePaymentStatus = async (ticketid) => {
+	try{
+		const query = `UPDATE tickets SET payment_status = "PAID" WHERE id = $1`;
+		const values = [ticketid];
+		const { rows } = await pool.query(query, values);
+
+		return rows;
+	}catch(err){
+		throw new Error("Error while updating payment status.");
 	}
 };
 
@@ -116,4 +133,5 @@ module.exports = {
 	attendeeActiveTicketDetails,
 	attendeePastTicketDetails,
 	bookedTicketDetails,
+	changePaymentStatus,
 };

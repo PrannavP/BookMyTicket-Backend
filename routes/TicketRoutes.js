@@ -9,6 +9,7 @@ const {
     attendeeActiveTicketDetailsController,
     attendeePastTicketDetailsController,
     bookedTicketDetailsController,
+    changePaymentStatusController,
 }  = require('../controllers/TicketController');
 
 // Route to store ticket details in DB
@@ -33,5 +34,8 @@ router.post('/attendee-active-ticket-details', attendeeActiveTicketDetailsContro
 router.post('/attendee-past-ticket-details', attendeePastTicketDetailsController);
 
 router.post('/booked-ticket-details', bookedTicketDetailsController);
+
+// Route to change payment status of ticket
+router.post("/change-payment-status", changePaymentStatusController);
 
 module.exports = router;

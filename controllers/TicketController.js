@@ -7,6 +7,7 @@ const {
     attendeeActiveTicketDetails,
     attendeePastTicketDetails,
     bookedTicketDetails,
+    changePaymentStatus,
 } = require('../models/TicketDetailsModel');
 
 // Controller to store tickets detail after booking
@@ -107,7 +108,18 @@ const bookedTicketDetailsController = async (req, res, next) => {
     }catch(err){
         next(err);
     }
-}; 
+};
+
+// Controller to change payment status of ticket
+const changePaymentStatusController = async (req, res, next) => {
+    try{
+        const ticketId = req.body.ticketid;
+        await changePaymentStatus(ticketId);
+        res.status(200).json({ message: "Payment Status Updated!" });
+    }catch(err){
+        next(err);
+    }
+};
 
 module.exports = {
     storeBookingDetailsController,
@@ -118,4 +130,5 @@ module.exports = {
     attendeeActiveTicketDetailsController,
     attendeePastTicketDetailsController,
     bookedTicketDetailsController,
+    changePaymentStatusController,
 }
